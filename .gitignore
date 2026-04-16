@@ -1,4 +1,3 @@
 .idea/
 dataset/
 NONCLOUD_FILES/.env
-dataset/app.py
