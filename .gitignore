@@ -1,4 +1,4 @@
 .idea/
 dataset/
-.env
-app.py
+NONCLOUD_FILES/.env
+dataset/app.py
