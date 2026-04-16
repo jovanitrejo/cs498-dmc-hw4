@@ -1,13 +1,13 @@
 # Issues Encountered
 Could not install Java 21 using
 ```commandline
-# apt-get -y temurin-21-jdk
+sudo apt-get -y temurin-21-jdk
 ```
 so instead, I ran
 ```commandline
-# apt-get -y openjdk-21-jdk
+sudo apt-get -y openjdk-21-jdk
 ```
-Which is another version of Java version 21.
+Which is another instance of Java version 21.
 
 ---
 
