@@ -18,7 +18,7 @@ def import_csv(tx):
 
 def main() -> None:
     load_dotenv()
-    with open("HW4.txt", "r") as ip_file:
+    with open("../HW4.txt", "r") as ip_file:
         external_ip: str = ip_file.readline()
     neo4j_pw: str | None = os.getenv("NEO4J_PW")
     if neo4j_pw is None:
