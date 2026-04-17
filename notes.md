@@ -25,3 +25,7 @@ Found the following article for rounding in neo4j: [https://dzone.com/articles/n
 
 Used the following documentation for using Python Neo4j Driver:
 [https://neo4j.com/docs/api/python-driver/current/](https://neo4j.com/docs/api/python-driver/current/)
+
+---
+
+Found the following documentation for part 2: [https://spark.apache.org/docs/latest/sql-getting-started.html](https://spark.apache.org/docs/latest/sql-getting-started.html)
