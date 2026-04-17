@@ -52,7 +52,7 @@ def get_top_companies(n: int = 1):
     records, _, _ = driver.execute_query(
         f"""
         MATCH (c:Company)<-[:WORKS_FOR]-(d:Driver)-[:TRIP]->(a:Area)
-        RETURN c AS company_name, count(*) AS trip_count
+        RETURN c.name AS company_name, count(*) AS trip_count
         ORDER BY trip_count
         DESC
         LIMIT {value}
