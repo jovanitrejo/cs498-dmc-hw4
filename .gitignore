@@ -2,3 +2,4 @@
 dataset/
 NONCLOUD_FILES/.env
 .vscode/
+.venv/
