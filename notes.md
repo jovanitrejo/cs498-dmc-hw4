@@ -16,3 +16,7 @@ To import the CSV file, the uploaded `taxi_trips_clean.csv` was uploaded to the 
 ---
 
 Had to also create a separate firewall rule in GCP that allowed port 8000 to any external client.
+
+---
+
+Found the following article for rounding in neo4j: [https://dzone.com/articles/neo4j-cypher-rounding-float](Neo4j & Cypher: Rounding a Float Value to Decimal Places)
