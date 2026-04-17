@@ -84,3 +84,22 @@ def get_high_fare_trips(area_id: int, min_fare: float):
     return {
         "trips": high_fares
     }
+
+@app.get("/co-area-drivers")
+def get_co_drivers(driver_id:str):
+    driver_id_lit: LiteralString = cast(LiteralString, driver_id)
+
+    query: LiteralString = f"""
+    MATCH (d1:Driver)-[:TRIP]->(a:Area)<-[:TRIP]-(d2:Driver)
+    WHERE d1.driver_id = {driver_id_lit} AND d2.driver_id <> {driver_id_lit}
+    RETURN d2.driver_id, count(*) AS shared_areas
+    ORDER BY shared_areas DESC
+    """
+
+    results, _, _ = driver.execute_query(driver)
+
+    co_drivers = [record.data() for record in results]
+
+    return {
+        "co_area_drivers": co_drivers
+    }
