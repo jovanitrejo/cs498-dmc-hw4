@@ -45,20 +45,6 @@ def get_graph_sum():
         "trip_count": counts["trip_count"]
     }
 
-@app.get("/node-count")
-def get_count():
-    records, _, _ = driver.execute_query(
-        """
-            MATCH (d)
-            RETURN count(d) AS total_nodes
-        """
-    )
-    counts = records[0]
-
-    return {
-        "total_nodes": counts['total_nodes']
-    }
-
 @app.get("/top-companies")
 def get_top_companies(n: int = 1):
     n_str: str = str(n)
@@ -77,4 +63,24 @@ def get_top_companies(n: int = 1):
 
     return {
         "companies": top_companies
+    }
+
+@app.get("/high-fare-trips")
+def get_high_fare_trips(area_id: int, min_fare: float):
+    area_id_str: str = str(area_id)
+    area_val: LiteralString = cast(LiteralString, area_id_str)
+    min_fare_str: str = str(min_fare)
+    min_fare_val: LiteralString = cast(LiteralString, min_fare_str)
+    
+    query: LiteralString = f"""
+    MATCH (d:Driver)-[t:TRIP]->(:Area {{"area_id: "{area_val}}})
+    WHERE t.fare > {min_fare_val}
+    RETURN t.trip_id, t.fare, d.driver_id
+    ORDER BY t.fare DESC
+    """
+    records, _, _ = driver.execute_query(query)
+
+    high_fares = [record.data() for record in records]
+    return {
+        "trips": high_fares
     }
