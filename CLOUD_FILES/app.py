@@ -73,7 +73,7 @@ def get_high_fare_trips(area_id: int, min_fare: float):
     min_fare_val: LiteralString = cast(LiteralString, min_fare_str)
     
     query: LiteralString = f"""
-    MATCH (d:Driver)-[t:TRIP]->(:Area {{"area_id: "{area_val}}})
+    MATCH (d:Driver)-[t:TRIP]->(:Area {{area_id: {area_val}}})
     WHERE t.fare > {min_fare_val}
     RETURN t.trip_id, t.fare, d.driver_id
     ORDER BY t.fare DESC
@@ -90,16 +90,32 @@ def get_co_drivers(driver_id:str):
     driver_id_lit: LiteralString = cast(LiteralString, driver_id)
 
     query: LiteralString = f"""
-    MATCH (d1:Driver)-[:TRIP]->(a:Area)<-[:TRIP]-(d2:Driver)
-    WHERE d1.driver_id = {driver_id_lit} AND d2.driver_id <> {driver_id_lit}
-    RETURN d2.driver_id, count(*) AS shared_areas
+    MATCH (d1:Driver {{driver_id: '{driver_id_lit}'}})-[:TRIP]->(a:Area)<-[:TRIP]-(d2:Driver)
+    WHERE d1 <> d2
+    RETURN d2.driver_id, count(DISTINCT a) AS shared_areas
     ORDER BY shared_areas DESC
     """
 
-    results, _, _ = driver.execute_query(driver)
+    results, _, _ = driver.execute_query(query)
 
     co_drivers = [record.data() for record in results]
 
     return {
         "co_area_drivers": co_drivers
+    }
+
+@app.get("/avg-fare-by-company")
+def get_avg_fares():
+    query: LiteralString = """
+    MATCH (c:Company)<-[:WORKS_FOR]-(:Driver)-[t:TRIP]->(:Area)
+    WITH c.name as name, avg(t.fare) as value
+    RETURN name, ROUND(100 * value) / 100 AS avg_fare
+    """
+
+    results, _, _ = driver.execute_query(query)
+
+    avg_fares = [record.data() for record in results]
+
+    return {
+        "companies": avg_fares
     }
